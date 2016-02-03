@@ -32,7 +32,7 @@ RUN yum install -y curl git man unzip vim wget
 RUN yum install -y tar openssh-server 
 RUN yum install -y libpng libpng-devel freetype freetype-devel
 RUN yum install -y easy_install-2.7 ipython pyzmq pip curl bzip2
-RUN pip install matplotlib 
+
 RUN curl https://bootstrap.pypa.io/ez_setup.py -o - | python2.7
 RUN yum install -y protobuf-compiler  python-dev
 RUN wget https://code.google.com/p/protobuf/downloads/detail?name=protobuf-2.5.0.tar.bz2
@@ -43,7 +43,11 @@ RUN make
 RUN make install
 
 RUN yum -y install scl-utils
-RUN yum -y install python33
+RUN yum -y install python3
+RUN easy_install pip
+
+
+RUN pip install matplotlib 
 
 
 # Automatic login
