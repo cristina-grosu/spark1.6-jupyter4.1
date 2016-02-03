@@ -6,13 +6,13 @@
 
 # Pull base image.
 #FROM ubuntu:14.04
-FROM centos:7
+##FROM centos:7
 
 # Install.
-RUN yum -y update 
+##RUN yum -y update 
 #RUN yum install -y build-essential
-RUN yum groupinstall -y "Development Tools"
-RUN yum install -y curl git man unzip vim wget
+##RUN yum groupinstall -y "Development Tools"
+##RUN yum install -y curl git man unzip vim wget
   
 
 # Add files.
@@ -29,44 +29,59 @@ RUN yum install -y curl git man unzip vim wget
 # Define default command.
 #CMD ["bash"]
 
-RUN yum install -y tar openssh-server 
-RUN yum install -y libpng libpng-devel freetype freetype-devel
-RUN yum install -y easy_install-2.7 ipython pyzmq pip curl bzip2
+##RUN yum install -y tar openssh-server 
+##RUN yum install -y libpng libpng-devel freetype freetype-devel
+##RUN yum install -y easy_install-2.7 ipython pyzmq pip curl bzip2
 
-RUN curl https://bootstrap.pypa.io/ez_setup.py -o - | python2.7
-RUN yum install -y protobuf-compiler  python-dev
-RUN wget  https://github.com/google/protobuf/archive/v2.5.0.tar.gz
-RUN tar xzvf v2.5.0.tar.gz
-RUN rm -rf v2.5.0.tar.gz
-RUN cd ./protobuf-2.5.0
-RUN ls
-RUN pwd
-RUN ./autogen.sh
-RUN ./configure --prefix=/usr
-RUN make
-RUN make install
+##RUN curl https://bootstrap.pypa.io/ez_setup.py -o - | python2.7
+##RUN yum install -y protobuf-compiler  python-dev
+##RUN wget  https://github.com/google/protobuf/archive/v2.5.0.tar.gz
+##RUN tar xzvf v2.5.0.tar.gz
+##RUN rm -rf v2.5.0.tar.gz
+##RUN cd ./protobuf-2.5.0
+#RUN ls
+#RUN pwd
+##RUN ./autogen.sh
+##RUN ./configure --prefix=/usr
+##RUN make
+##RUN make install
 
-RUN yum -y install scl-utils
-RUN yum -y install python3
-RUN easy_install pip
+##RUN yum -y install scl-utils
+##RUN yum -y install python3
+##RUN easy_install pip
 
 
-RUN pip install matplotlib 
+##RUN pip install matplotlib 
 
 
 # Automatic login
-RUN ssh-keygen -q -N "" -t rsa -f /root/.ssh/id_rsa
-RUN cp /root/.ssh/id_rsa.pub /root/.ssh/authorized_keys
+##RUN ssh-keygen -q -N "" -t rsa -f /root/.ssh/id_rsa
+##RUN cp /root/.ssh/id_rsa.pub /root/.ssh/authorized_keys
 
-RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
+##RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
 
 #COPY config /root/.ssh/
 #COPY start.sh /root/
 #COPY sync-hosts.sh /root/
+FROM ubuntu:14.04
 
+# Install.
+RUN \
+  sed -i 's/# \(.*multiverse$\)/\1/g' /etc/apt/sources.list && \
+  apt-get update && \
+  apt-get -y upgrade && \
+  apt-get install -y build-essential && \
+  apt-get install -y software-properties-common && \
+  apt-get install -y byobu curl git htop man unzip vim wget && \
+  rm -rf /var/lib/apt/lists/*
+
+# Add files.
+ADD root/.bashrc /root/.bashrc
+#ADD root/.gitconfig /root/.gitconfig
+#ADD root/.scripts /root/.scripts
 
 # Install Java 8
-#RUN mkdir /root/opt
+RUN mkdir /opt
 RUN cd /opt
 
 RUN wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/8u72-b15/jdk-8u72-linux-x64.tar.gz"
