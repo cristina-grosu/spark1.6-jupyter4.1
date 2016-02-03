@@ -35,8 +35,8 @@ RUN yum install -y easy_install-2.7 ipython pyzmq pip curl bzip2
 
 RUN curl https://bootstrap.pypa.io/ez_setup.py -o - | python2.7
 RUN yum install -y protobuf-compiler  python-dev
-RUN wget https://code.google.com/p/protobuf/downloads/detail?name=protobuf-2.5.0.tar.bz2
-RUN bzip2 protobuf-2.5.0.tar.bz2
+RUN wget  https://github.com/google/protobuf/archive/v2.5.0.tar.gz
+RUN tar xzvf v2.5.0.tar.gz
 RUN cd protobuf-2.5.0
 RUN ./configure
 RUN make
