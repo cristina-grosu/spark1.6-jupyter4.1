@@ -12,8 +12,7 @@ FROM centos:7
 RUN yum -y update 
 #RUN yum install -y build-essential
 RUN yum groupinstall -y "Development Tools"
-RUN yum install -y software-properties-common
-RUN yum install -y byobu curl git htop man unzip vim wget
+RUN yum install -y curl git man unzip vim wget
   
 
 # Add files.
