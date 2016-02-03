@@ -88,6 +88,9 @@ RUN wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2
 RUN tar xzf jdk-8u72-linux-x64.tar.gz
 RUN rm -rf jdk-8u72-linux-x64.tar.gz
 
+RUN ls
+RUN pwd
+
 RUN cd /opt/jdk1.8.0_72/
 RUN alternatives --install /usr/bin/java java /opt/jdk1.8.0_72/bin/java 2
 RUN alternatives --config java
