@@ -147,7 +147,7 @@ RUN apt-get update && \
     gcc && apt-get clean
 
 #USER jovyan
-
+RUN find / -name conda
 # Install Python 3 packages
 RUN conda install --yes \
     'ipywidgets=4.0*' \
