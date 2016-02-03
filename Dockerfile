@@ -21,15 +21,30 @@ RUN yum install -y curl git man unzip vim wget
 #ADD .scripts /root/.scripts
 
 # Set environment variables.
-ENV HOME /root
+#ENV HOME /root
 
 # Define working directory.
-WORKDIR /root
+#WORKDIR /root
 
 # Define default command.
-CMD ["bash"]
+#CMD ["bash"]
 
-RUN apt-get update && apt-get install -y git wget tar unzip openssh-server python-software-properties software-properties-common protobuf-compiler build-essential python-dev
+RUN yum install -y tar openssh-server 
+RUN yum install -y libpng libpng-devel freetype freetype-devel
+RUN yum install -y easy_install-2.7 ipython pyzmq pip curl bzip2
+RUN pip install matplotlib 
+RUN curl https://bootstrap.pypa.io/ez_setup.py -o - | python2.7
+RUN yum install -y protobuf-compiler  python-dev
+RUN wget https://code.google.com/p/protobuf/downloads/detail?name=protobuf-2.5.0.tar.bz2
+RUN bzip2 protobuf-2.5.0.tar.bz2
+RUN cd protobuf-2.5.0
+RUN ./configure
+RUN make
+RUN make install
+
+RUN yum -y install scl-utils
+RUN yum -y install python33
+
 
 # Automatic login
 RUN ssh-keygen -q -N "" -t rsa -f /root/.ssh/id_rsa
