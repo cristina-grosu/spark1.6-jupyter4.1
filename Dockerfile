@@ -90,8 +90,7 @@ ENV PATH $PATH:/opt/jdk1.8.0_72/bin:/opt/jdk1.8.0_72/jre/bin:/etc/alternatives:/
 
 RUN echo 'export JAVA_HOME="/opt/jdk1.8.0_72"' >> ~/.bashrc && \
     echo 'export PATH="$PATH:/opt/jdk1.8.0_72/bin:/opt/jdk1.8.0_72/jre/bin"' >> ~/.bashrc && \
-    bash ~/.bashrc && cd /opt/jdk1.8.0_72/ && alternatives --install /usr/bin/java java /opt/jdk1.8.0_72/bin/java 2 && \
-    alternatives --config java
+    bash ~/.bashrc && cd /opt/jdk1.8.0_72/ && update-alternatives --install /usr/bin/java java /opt/jdk1.8.0_72/bin/java 1
    
 #RUN find / -name alternatives
 #RUN ls -lha /etc/alternatives
