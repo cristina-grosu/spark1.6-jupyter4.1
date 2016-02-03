@@ -37,8 +37,10 @@ RUN curl https://bootstrap.pypa.io/ez_setup.py -o - | python2.7
 RUN yum install -y protobuf-compiler  python-dev
 RUN wget  https://github.com/google/protobuf/archive/v2.5.0.tar.gz
 RUN tar xzvf v2.5.0.tar.gz
-RUN cd protobuf-2.5.0
+RUN rm -rf v2.5.0.tar.gz
+RUN cd ./protobuf-2.5.0
 RUN ls
+RUN pwd
 RUN ./autogen.sh
 RUN ./configure --prefix=/usr
 RUN make
