@@ -18,9 +18,9 @@ RUN \
   rm -rf /var/lib/apt/lists/*
 
 # Add files.
-ADD root/.bashrc /root/.bashrc
-ADD root/.gitconfig /root/.gitconfig
-ADD root/.scripts /root/.scripts
+#ADD .bashrc /root/.bashrc
+#ADD .gitconfig /root/.gitconfig
+#ADD .scripts /root/.scripts
 
 # Set environment variables.
 ENV HOME /root
@@ -39,9 +39,9 @@ RUN cp /root/.ssh/id_rsa.pub /root/.ssh/authorized_keys
 
 RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
 
-COPY config /root/.ssh/
-COPY start.sh /root/
-COPY sync-hosts.sh /root/
+#COPY config /root/.ssh/
+#COPY start.sh /root/
+#COPY sync-hosts.sh /root/
 
 
 # Install Java 8
