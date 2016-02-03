@@ -70,6 +70,8 @@ RUN tar xzvf hadoop-2.7.1.tar.gz
 RUN rm ./hadoop-2.7.1.tar.gz 
 RUN mv hadoop-2.7.1/ hadoop
 
+RUN ls
+
 ENV HADOOP_HOME /opt/hadoop
 
 # Install Spark 1.6.0
