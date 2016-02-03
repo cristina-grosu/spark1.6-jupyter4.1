@@ -10,7 +10,8 @@ FROM centos:7
 
 # Install.
 RUN yum -y update 
-RUN yum install -y build-essential
+#RUN yum install -y build-essential
+RUN yum groupinstall "Development Tools"
 RUN yum install -y software-properties-common
 RUN yum install -y byobu curl git htop man unzip vim wget
   
