@@ -38,7 +38,8 @@ RUN yum install -y protobuf-compiler  python-dev
 RUN wget  https://github.com/google/protobuf/archive/v2.5.0.tar.gz
 RUN tar xzvf v2.5.0.tar.gz
 RUN cd protobuf-2.5.0
-RUN ./configure
+RUN ./autogen.sh
+RUN ./configure --prefix=/usr
 RUN make
 RUN make install
 
