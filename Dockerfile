@@ -57,6 +57,8 @@ RUN alternatives --config java
 ENV JAVA_HOME /opt/jdk1.8.0_72
 ENV PATH $PATH:/opt/jdk1.8.0_72/bin:/opt/jdk1.8.0_72/jre/bin
 
+RUN touch ~/.bashrc
+
 RUN echo 'export JAVA_HOME="/opt/jdk1.8.0_72"' >> ~/.bashrc
 RUN echo 'export PATH="$PATH:/opt/jdk1.8.0_72/bin:/opt/jdk1.8.0_72/jre/bin"' >> ~/.bashrc
 RUN bash ~/.bashrc
