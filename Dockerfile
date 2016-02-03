@@ -5,7 +5,8 @@
 #
 
 # Pull base image.
-FROM ubuntu:14.04
+#FROM ubuntu:14.04
+FROM centos:7
 
 # Install.
 RUN \
@@ -45,43 +46,37 @@ RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so
 
 
 # Install Java 8
-RUN mkdir /root/opt
-RUN cd ./opt/
-
-RUN ls
-RUN pwd
+#RUN mkdir /root/opt
+RUN cd /opt
 
 RUN wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/8u72-b15/jdk-8u72-linux-x64.tar.gz"
 RUN tar xzf jdk-8u72-linux-x64.tar.gz
 RUN rm -rf jdk-8u72-linux-x64.tar.gz
 
-RUN ls
-RUN pwd
-
-RUN cd ./opt/jdk1.8.0_72/
-RUN alternatives --install /usr/bin/java java /root/opt/jdk1.8.0_72/bin/java 2
+RUN cd /opt/jdk1.8.0_72/
+RUN alternatives --install /usr/bin/java java /opt/jdk1.8.0_72/bin/java 2
 RUN alternatives --config java
 
-ENV JAVA_HOME /root/opt/jdk1.8.0_72
-ENV PATH $PATH:/root/opt/jdk1.8.0_72/bin:/root/opt/jdk1.8.0_72/jre/bin
+ENV JAVA_HOME /opt/jdk1.8.0_72
+ENV PATH $PATH:/opt/jdk1.8.0_72/bin:/opt/jdk1.8.0_72/jre/bin
 
-RUN touch ~/.bashrc
+#RUN touch ~/.bashrc
 
 RUN echo 'export JAVA_HOME="/opt/jdk1.8.0_72"' >> ~/.bashrc
 RUN echo 'export PATH="$PATH:/opt/jdk1.8.0_72/bin:/opt/jdk1.8.0_72/jre/bin"' >> ~/.bashrc
 RUN bash ~/.bashrc
 
 # Install Hadoop 2.7.1
-RUN cd /root/opt
+RUN cd /opt
 RUN wget https://www.apache.org/dist/hadoop/core/hadoop-2.7.1/hadoop-2.7.1.tar.gz
 RUN tar xzvf hadoop-2.7.1.tar.gz 
 RUN rm ./hadoop-2.7.1.tar.gz 
 RUN mv hadoop-2.7.1/ hadoop
 
-ENV HADOOP_HOME /root/opt/hadoop
+ENV HADOOP_HOME /opt/hadoop
 
 # Install Spark 1.6.0
-RUN cd /root/opt
+RUN cd /opt
 RUN wget http://apache.javapipe.com/spark/spark-1.6.0/spark-1.6.0-bin-hadoop2.6.tgz 
 RUN tar xzvf spark-1.6.0-bin-hadoop2.6.tgz
 RUN rm  spark-1.6.0-bin-hadoop2.6.tgz
@@ -89,33 +84,31 @@ RUN rm  spark-1.6.0-bin-hadoop2.6.tgz
 # Scala Spark kernel (build and cleanup)
 RUN cd /tmp && \
     echo deb http://dl.bintray.com/sbt/debian / > /etc/apt/sources.list.d/sbt.list && \
-    apt-get update && \
     git clone https://github.com/ibm-et/spark-kernel.git && \
-    apt-get install -yq --force-yes --no-install-recommends sbt && \
+    yum install -y  sbt && \
     cd spark-kernel && \
     git checkout 3905e47815 && \
     make dist SHELL=/bin/bash && \
-    mv dist/spark-kernel /root/opt/spark-kernel && \
-    chmod +x /root/opt/spark-kernel && \
+    mv dist/spark-kernel /opt/spark-kernel && \
+    chmod +x /opt/spark-kernel && \
     rm -rf ~/.ivy2 && \
     rm -rf ~/.sbt && \
     rm -rf /tmp/spark-kernel && \
-    apt-get remove -y sbt && \
-    apt-get clean
+    yum remove remove -y sbt && \
+    yum clean packages
     
 # Spark and Mesos pointers
-ENV SPARK_HOME /root/opt/spark-1.6.0-bin-hadoop2.6
+ENV SPARK_HOME /opt/spark-1.6.0-bin-hadoop2.6
 ENV R_LIBS_USER $SPARK_HOME/R/lib
 ENV PYTHONPATH $SPARK_HOME/python:$SPARK_HOME/python/lib/py4j-0.8.2.1-src.zip
 #ENV MESOS_NATIVE_LIBRARY /usr/local/lib/libmesos.so
 ENV SPARK_OPTS --driver-java-options=-Xms1024M --driver-java-options=-Xmx4096M --driver-java-options=-Dlog4j.logLevel=info
 
 # R pre-requisites
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
+RUN yum install -y  \
     fonts-dejavu \
     gfortran \
-    gcc && apt-get clean
+    gcc && yum clean packages
 
 #USER jovyan
 
