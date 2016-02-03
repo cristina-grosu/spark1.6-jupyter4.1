@@ -118,8 +118,9 @@ RUN rm  spark-1.6.0-bin-hadoop2.6.tgz
 # Scala Spark kernel (build and cleanup)
 RUN cd /tmp && \
     echo deb http://dl.bintray.com/sbt/debian / > /etc/apt/sources.list.d/sbt.list && \
+    apt-get update && \
     git clone https://github.com/ibm-et/spark-kernel.git && \
-    yum install -y  sbt && \
+    apt-get install -yq --force-yes --no-install-recommends sbt && \
     cd spark-kernel && \
     git checkout 3905e47815 && \
     make dist SHELL=/bin/bash && \
@@ -128,8 +129,8 @@ RUN cd /tmp && \
     rm -rf ~/.ivy2 && \
     rm -rf ~/.sbt && \
     rm -rf /tmp/spark-kernel && \
-    yum remove remove -y sbt && \
-    yum clean packages
+    apt-get remove -y sbt && \
+    apt-get clean
     
 # Spark and Mesos pointers
 ENV SPARK_HOME /opt/spark-1.6.0-bin-hadoop2.6
@@ -139,10 +140,11 @@ ENV PYTHONPATH $SPARK_HOME/python:$SPARK_HOME/python/lib/py4j-0.8.2.1-src.zip
 ENV SPARK_OPTS --driver-java-options=-Xms1024M --driver-java-options=-Xmx4096M --driver-java-options=-Dlog4j.logLevel=info
 
 # R pre-requisites
-RUN yum install -y  \
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
     fonts-dejavu \
     gfortran \
-    gcc && yum clean packages
+    gcc && apt-get clean
 
 #USER jovyan
 
@@ -177,8 +179,8 @@ RUN conda install --yes \
     'r-rcurl=1.95*' && conda clean -yt
 
 # Scala Spark kernel spec
-RUN mkdir -p /root/opt/conda/share/jupyter/kernels/scala
-COPY kernel.json /root/opt/conda/share/jupyter/kernels/scala/
+RUN mkdir -p /opt/conda/share/jupyter/kernels/scala
+COPY kernel.json /opt/conda/share/jupyter/kernels/scala/
 
 #USER root
 
