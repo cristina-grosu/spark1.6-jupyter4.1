@@ -82,7 +82,7 @@ ADD .bashrc /root/.bashrc
 
 # Install Java 8
 #RUN mkdir /opt
-RUN cd /opt
+RUN cd ./opt
 
 RUN ls 
 RUN pwd
