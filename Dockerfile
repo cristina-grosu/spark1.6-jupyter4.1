@@ -46,7 +46,7 @@ RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so
 
 # Install Java 8
 RUN mkdir /root/opt
-RUN cd /root/opt/
+RUN cd ./opt/
 
 RUN ls
 RUN pwd
@@ -58,7 +58,7 @@ RUN rm -rf jdk-8u72-linux-x64.tar.gz
 RUN ls
 RUN pwd
 
-RUN cd /root/opt/jdk1.8.0_72/
+RUN cd ./opt/jdk1.8.0_72/
 RUN alternatives --install /usr/bin/java java /root/opt/jdk1.8.0_72/bin/java 2
 RUN alternatives --config java
 
