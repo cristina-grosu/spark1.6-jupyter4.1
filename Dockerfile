@@ -82,21 +82,11 @@ ADD .bashrc /root/.bashrc
 
 # Install Java 8
 #RUN mkdir /opt
-RUN cd opt
+RUN cd opt && wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/8u72-b15/jdk-8u72-linux-x64.tar.gz" &&\
+   tar xzf jdk-8u72-linux-x64.tar.gz && rm -rf jdk-8u72-linux-x64.tar.gz
 
-RUN ls 
-RUN pwd
-
-RUN wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/8u72-b15/jdk-8u72-linux-x64.tar.gz"
-RUN tar xzf jdk-8u72-linux-x64.tar.gz
-RUN rm -rf jdk-8u72-linux-x64.tar.gz
-
-RUN ls
-RUN pwd
-
-RUN cd /opt/jdk1.8.0_72/
-RUN alternatives --install /usr/bin/java java /opt/jdk1.8.0_72/bin/java 2
-RUN alternatives --config java
+RUN cd /opt/jdk1.8.0_72/ && alternatives --install /usr/bin/java java /opt/jdk1.8.0_72/bin/java 2 && \
+    alternatives --config java
 
 ENV JAVA_HOME /opt/jdk1.8.0_72
 ENV PATH $PATH:/opt/jdk1.8.0_72/bin:/opt/jdk1.8.0_72/jre/bin
@@ -108,11 +98,8 @@ RUN echo 'export PATH="$PATH:/opt/jdk1.8.0_72/bin:/opt/jdk1.8.0_72/jre/bin"' >> 
 RUN bash ~/.bashrc
 
 # Install Hadoop 2.7.1
-RUN cd /opt
-RUN wget https://www.apache.org/dist/hadoop/core/hadoop-2.7.1/hadoop-2.7.1.tar.gz
-RUN tar xzvf hadoop-2.7.1.tar.gz 
-RUN rm ./hadoop-2.7.1.tar.gz 
-RUN mv hadoop-2.7.1/ hadoop
+RUN cd /opt && wget https://www.apache.org/dist/hadoop/core/hadoop-2.7.1/hadoop-2.7.1.tar.gz && \
+    tar xzvf hadoop-2.7.1.tar.gz && rm ./hadoop-2.7.1.tar.gz &&  mv hadoop-2.7.1/ hadoop
 
 ENV HADOOP_HOME /opt/hadoop
 
