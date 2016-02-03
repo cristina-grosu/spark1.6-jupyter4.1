@@ -151,7 +151,7 @@ RUN wget https://3230d63b5fc54e62148e-c95ac804525aac4b6dba79b00b39d1d3.ssl.cf1.r
 
 #USER jovyan
 # Install Python 3 packages
-RUN yes | conda install \
+RUN yes yes | conda install \
     'ipywidgets=4.0*' \
     'pandas=0.17*' \
     'matplotlib=1.4*' \
