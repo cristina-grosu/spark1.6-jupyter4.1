@@ -157,8 +157,9 @@ RUN echo "yes" | conda install \
     'matplotlib=1.4*' \
     'scipy=0.16*' \
     'seaborn=0.6*' \
-    'scikit-learn=0.16*' \
-    && conda clean -yt
+    'scikit-learn=0.16*' 
+    
+RUN conda clean -yt
 
 # Install Python 2 packages
 RUN conda create -p $CONDA_DIR/envs/python2 python=2.7 \
