@@ -103,21 +103,38 @@ RUN cd /opt && wget http://apache.javapipe.com/spark/spark-1.6.0/spark-1.6.0-bin
 RUN tar xzvf /opt/spark-1.6.0-bin-hadoop2.6.tgz
 RUN rm  /opt/spark-1.6.0-bin-hadoop2.6.tgz
 
+ENV CONDA_DIR /opt/conda
+
+RUN cd /tmp && \
+    mkdir -p $CONDA_DIR && \
+    wget --quiet https://repo.continuum.io/miniconda/Miniconda3-3.9.1-Linux-x86_64.sh && \
+    echo "6c6b44acdd0bc4229377ee10d52c8ac6160c336d9cdd669db7371aa9344e1ac3 *Miniconda3-3.9.1-Linux-x86_64.sh" | sha256sum -c - && \
+    /bin/bash Miniconda3-3.9.1-Linux-x86_64.sh -f -b -p $CONDA_DIR && \
+    rm Miniconda3-3.9.1-Linux-x86_64.sh && \
+    $CONDA_DIR/bin/conda install --yes conda==3.14.1
+
+# Install Jupyter notebook as jovyan
+RUN conda install --yes \
+    'notebook=4.1*' \
+    terminado \
+    && conda clean -yt
+
+
 # Scala Spark kernel (build and cleanup)
-#########RUN cd /tmp && \
-#########    echo deb http://dl.bintray.com/sbt/debian / > /etc/apt/sources.list.d/sbt.list && \
-#########    apt-get update && \
-#########    git clone https://github.com/ibm-et/spark-kernel.git && \
-#########    apt-get install -yq --force-yes --no-install-recommends sbt && \
-#########    cd spark-kernel && \
-#########    git checkout 3905e47815 && \
-#########    make dist SHELL=/bin/bash && \
-########    chmod +x /opt/spark-kernel && \
-########    rm -rf ~/.ivy2 && \
-########    rm -rf ~/.sbt && \
-########    rm -rf /tmp/spark-kernel && \
-########    apt-get remove -y sbt && \
-########    apt-get clean
+RUN cd /tmp && \
+    echo deb http://dl.bintray.com/sbt/debian / > /etc/apt/sources.list.d/sbt.list && \
+    apt-get update && \
+    git clone https://github.com/ibm-et/spark-kernel.git && \
+    apt-get install -yq --force-yes --no-install-recommends sbt && \
+    cd spark-kernel && \
+    git checkout 3905e47815 && \
+    make dist SHELL=/bin/bash && \
+    chmod +x /opt/spark-kernel && \
+    rm -rf ~/.ivy2 && \
+    rm -rf ~/.sbt && \
+    rm -rf /tmp/spark-kernel && \
+    apt-get remove -y sbt && \
+    apt-get clean
     
 # Spark and Mesos pointers
 ENV SPARK_HOME /opt/spark-1.6.0-bin-hadoop2.6
@@ -127,11 +144,11 @@ ENV PYTHONPATH $SPARK_HOME/python:$SPARK_HOME/python/lib/py4j-0.8.2.1-src.zip
 ENV SPARK_OPTS --driver-java-options=-Xms1024M --driver-java-options=-Xmx4096M --driver-java-options=-Dlog4j.logLevel=info
 
 # R pre-requisites
-########RUN apt-get update && \
-########    apt-get install -y --no-install-recommends \
-########    fonts-dejavu \
-########    gfortran \
-########    gcc && apt-get clean
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    fonts-dejavu \
+    gfortran \
+    gcc && apt-get clean
     
 #RUN wget https://3230d63b5fc54e62148e-c95ac804525aac4b6dba79b00b39d1d3.ssl.cf1.rackcdn.com/Anaconda3-2.4.1-Linux-x86_64.sh && \
 #  chmod +x Anaconda3-2.4.1-Linux-x86_64.sh && ./Anaconda3-2.4.1-Linux-x86_64.sh -b
@@ -139,39 +156,39 @@ ENV SPARK_OPTS --driver-java-options=-Xms1024M --driver-java-options=-Xmx4096M -
 #######ENV PATH $PATH:/root/anaconda3/bin
 #USER jovyan
 # Install Python 3 packages
-#######RUN conda install --yes \
-#######    'ipywidgets=4.0*' \
-#######    'pandas=0.17*' \
-#######    'matplotlib=1.4*' \
-#######    'scipy=0.16*' \
-#######    'seaborn=0.6*' \
-######    'scikit-learn=0.16*' 
+RUN /opt/conda/bin/conda install --yes \
+    'ipywidgets=4.0*' \
+    'pandas=0.17*' \
+    'matplotlib=1.4*' \
+    'scipy=0.16*' \
+    'seaborn=0.6*' \
+    'scikit-learn=0.16*' 
     
-########RUN conda clean -yt
+RUN /opt/conda/bin/conda clean -yt
 
 # Install Python 2 packages
-###########RUN conda create -p $CONDA_DIR/envs/python2 python=2.7 \
-########    'ipython=4.0*' \
-########    'ipywidgets=4.0*' \
-########    'pandas=0.17*' \
-########    'matplotlib=1.4*' \
-#######    'scipy=0.16*' \
-#######    'seaborn=0.6*' \
-######    'scikit-learn=0.16*' \
-######    pyzmq \
-#########    && conda clean -yt
+RUN /opt/conda/bin/conda create -p $CONDA_DIR/envs/python2 python=2.7 \
+    'ipython=4.0*' \
+    'ipywidgets=4.0*' \
+    'pandas=0.17*' \
+    'matplotlib=1.4*' \
+    'scipy=0.16*' \
+    'seaborn=0.6*' \
+    'scikit-learn=0.16*' \
+    pyzmq \
+    && /opt/conda/bin/conda clean -yt
 
 # R packages
-#######RUN conda config --add channels r
-############RUN conda install --yes \
-#######    'r-base=3.2*' \
-#########    'r-irkernel=0.5*' \
-#######    'r-ggplot2=1.0*' \
-#########    'r-rcurl=1.95*' && conda clean -yt
+RUN /opt/conda/bin/conda config --add channels r
+RUN /opt/conda/bin/conda install --yes \
+    'r-base=3.2*' \
+    'r-irkernel=0.5*' \
+    'r-ggplot2=1.0*' \
+    'r-rcurl=1.95*' && /opt/conda/bin/conda clean -yt
 
 # Scala Spark kernel spec
-#########RUN mkdir -p /opt/conda/share/jupyter/kernels/scala
-########COPY kernel.json /opt/conda/share/jupyter/kernels/scala/
+RUN mkdir -p /opt/conda/share/jupyter/kernels/scala
+COPY kernel.json /opt/conda/share/jupyter/kernels/scala/
 
 #USER root
 
