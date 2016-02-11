@@ -92,17 +92,6 @@ RUN echo 'export JAVA_HOME="/opt/jdk1.8.0_72"' >> ~/.bashrc && \
     echo 'export PATH="$PATH:/opt/jdk1.8.0_72/bin:/opt/jdk1.8.0_72/jre/bin"' >> ~/.bashrc && \
     bash ~/.bashrc && cd /opt/jdk1.8.0_72/ && update-alternatives --install /usr/bin/java java /opt/jdk1.8.0_72/bin/java 1
    
-#RUN find / -name alternatives
-#RUN ls -lha /etc/alternatives
-#RUN ls -lha /var/lib/dpkg/alternatives
-
-#RUN cd /opt/jdk1.8.0_72/ && alternatives --install /usr/bin/java java /opt/jdk1.8.0_72/bin/java 2 && \
-#    alternatives --config java
-
-#RUN touch ~/.bashrc
-
-
-
 # Install Hadoop 2.7.1
 RUN cd /opt && wget https://www.apache.org/dist/hadoop/core/hadoop-2.7.1/hadoop-2.7.1.tar.gz && \
     tar xzvf hadoop-2.7.1.tar.gz && rm ./hadoop-2.7.1.tar.gz &&  mv hadoop-2.7.1/ hadoop
@@ -110,27 +99,25 @@ RUN cd /opt && wget https://www.apache.org/dist/hadoop/core/hadoop-2.7.1/hadoop-
 ENV HADOOP_HOME /opt/hadoop
 
 # Install Spark 1.6.0
-RUN cd /opt
-RUN wget http://apache.javapipe.com/spark/spark-1.6.0/spark-1.6.0-bin-hadoop2.6.tgz 
+RUN cd /opt && wget http://apache.javapipe.com/spark/spark-1.6.0/spark-1.6.0-bin-hadoop2.6.tgz 
 RUN tar xzvf spark-1.6.0-bin-hadoop2.6.tgz
 RUN rm  spark-1.6.0-bin-hadoop2.6.tgz
 
 # Scala Spark kernel (build and cleanup)
-RUN cd /tmp && \
-    echo deb http://dl.bintray.com/sbt/debian / > /etc/apt/sources.list.d/sbt.list && \
-    apt-get update && \
-    git clone https://github.com/ibm-et/spark-kernel.git && \
-    apt-get install -yq --force-yes --no-install-recommends sbt && \
-    cd spark-kernel && \
-    git checkout 3905e47815 && \
-    make dist SHELL=/bin/bash && \
-    mv dist/spark-kernel /opt/spark-kernel && \
-    chmod +x /opt/spark-kernel && \
-    rm -rf ~/.ivy2 && \
-    rm -rf ~/.sbt && \
-    rm -rf /tmp/spark-kernel && \
-    apt-get remove -y sbt && \
-    apt-get clean
+#########RUN cd /tmp && \
+#########    echo deb http://dl.bintray.com/sbt/debian / > /etc/apt/sources.list.d/sbt.list && \
+#########    apt-get update && \
+#########    git clone https://github.com/ibm-et/spark-kernel.git && \
+#########    apt-get install -yq --force-yes --no-install-recommends sbt && \
+#########    cd spark-kernel && \
+#########    git checkout 3905e47815 && \
+#########    make dist SHELL=/bin/bash && \
+########    chmod +x /opt/spark-kernel && \
+########    rm -rf ~/.ivy2 && \
+########    rm -rf ~/.sbt && \
+########    rm -rf /tmp/spark-kernel && \
+########    apt-get remove -y sbt && \
+########    apt-get clean
     
 # Spark and Mesos pointers
 ENV SPARK_HOME /opt/spark-1.6.0-bin-hadoop2.6
@@ -140,59 +127,59 @@ ENV PYTHONPATH $SPARK_HOME/python:$SPARK_HOME/python/lib/py4j-0.8.2.1-src.zip
 ENV SPARK_OPTS --driver-java-options=-Xms1024M --driver-java-options=-Xmx4096M --driver-java-options=-Dlog4j.logLevel=info
 
 # R pre-requisites
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-    fonts-dejavu \
-    gfortran \
-    gcc && apt-get clean
+########RUN apt-get update && \
+########    apt-get install -y --no-install-recommends \
+########    fonts-dejavu \
+########    gfortran \
+########    gcc && apt-get clean
     
-RUN wget https://3230d63b5fc54e62148e-c95ac804525aac4b6dba79b00b39d1d3.ssl.cf1.rackcdn.com/Anaconda3-2.4.1-Linux-x86_64.sh && \
-  chmod +x Anaconda3-2.4.1-Linux-x86_64.sh && ./Anaconda3-2.4.1-Linux-x86_64.sh -b
+#RUN wget https://3230d63b5fc54e62148e-c95ac804525aac4b6dba79b00b39d1d3.ssl.cf1.rackcdn.com/Anaconda3-2.4.1-Linux-x86_64.sh && \
+#  chmod +x Anaconda3-2.4.1-Linux-x86_64.sh && ./Anaconda3-2.4.1-Linux-x86_64.sh -b
 
-ENV PATH $PATH:/root/anaconda3/bin
+#######ENV PATH $PATH:/root/anaconda3/bin
 #USER jovyan
 # Install Python 3 packages
-RUN conda install --yes \
-    'ipywidgets=4.0*' \
-    'pandas=0.17*' \
-    'matplotlib=1.4*' \
-    'scipy=0.16*' \
-    'seaborn=0.6*' \
-    'scikit-learn=0.16*' 
+#######RUN conda install --yes \
+#######    'ipywidgets=4.0*' \
+#######    'pandas=0.17*' \
+#######    'matplotlib=1.4*' \
+#######    'scipy=0.16*' \
+#######    'seaborn=0.6*' \
+######    'scikit-learn=0.16*' 
     
-RUN conda clean -yt
+########RUN conda clean -yt
 
 # Install Python 2 packages
-RUN conda create -p $CONDA_DIR/envs/python2 python=2.7 \
-    'ipython=4.0*' \
-    'ipywidgets=4.0*' \
-    'pandas=0.17*' \
-    'matplotlib=1.4*' \
-    'scipy=0.16*' \
-    'seaborn=0.6*' \
-    'scikit-learn=0.16*' \
-    pyzmq \
-    && conda clean -yt
+###########RUN conda create -p $CONDA_DIR/envs/python2 python=2.7 \
+########    'ipython=4.0*' \
+########    'ipywidgets=4.0*' \
+########    'pandas=0.17*' \
+########    'matplotlib=1.4*' \
+#######    'scipy=0.16*' \
+#######    'seaborn=0.6*' \
+######    'scikit-learn=0.16*' \
+######    pyzmq \
+#########    && conda clean -yt
 
 # R packages
-RUN conda config --add channels r
-RUN conda install --yes \
-    'r-base=3.2*' \
-    'r-irkernel=0.5*' \
-    'r-ggplot2=1.0*' \
-    'r-rcurl=1.95*' && conda clean -yt
+#######RUN conda config --add channels r
+############RUN conda install --yes \
+#######    'r-base=3.2*' \
+#########    'r-irkernel=0.5*' \
+#######    'r-ggplot2=1.0*' \
+#########    'r-rcurl=1.95*' && conda clean -yt
 
 # Scala Spark kernel spec
-RUN mkdir -p /opt/conda/share/jupyter/kernels/scala
-COPY kernel.json /opt/conda/share/jupyter/kernels/scala/
+#########RUN mkdir -p /opt/conda/share/jupyter/kernels/scala
+########COPY kernel.json /opt/conda/share/jupyter/kernels/scala/
 
 #USER root
 
 # Install Python 2 kernel spec globally to avoid permission problems when NB_UID
 # switching at runtime.
-RUN $CONDA_DIR/envs/python2/bin/python \
-    $CONDA_DIR/envs/python2/bin/ipython \
-    kernelspec install-self
+#######RUN $CONDA_DIR/envs/python2/bin/python \
+#######    $CONDA_DIR/envs/python2/bin/ipython \
+######3    kernelspec install-self
 
 #USER jovyan
 
