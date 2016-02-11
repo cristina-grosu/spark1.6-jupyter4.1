@@ -100,8 +100,8 @@ ENV HADOOP_HOME /opt/hadoop
 
 # Install Spark 1.6.0
 RUN cd /opt && wget http://apache.javapipe.com/spark/spark-1.6.0/spark-1.6.0-bin-hadoop2.6.tgz 
-RUN tar xzvf spark-1.6.0-bin-hadoop2.6.tgz
-RUN rm  spark-1.6.0-bin-hadoop2.6.tgz
+RUN tar xzvf /opt/spark-1.6.0-bin-hadoop2.6.tgz
+RUN rm  /opt/spark-1.6.0-bin-hadoop2.6.tgz
 
 # Scala Spark kernel (build and cleanup)
 #########RUN cd /tmp && \
