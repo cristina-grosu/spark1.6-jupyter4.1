@@ -106,7 +106,7 @@ RUN rm  /opt/spark-1.6.0-bin-hadoop2.6.tgz
 ENV CONDA_DIR /opt/conda
 ENV PATH $CONDA_DIR/bin:$PATH
 
-RUN cd /tmp && \
+RUN cd /opt && \
     mkdir -p $CONDA_DIR && \
     wget --quiet https://repo.continuum.io/miniconda/Miniconda3-3.9.1-Linux-x86_64.sh && \
     echo "6c6b44acdd0bc4229377ee10d52c8ac6160c336d9cdd669db7371aa9344e1ac3 *Miniconda3-3.9.1-Linux-x86_64.sh" | sha256sum -c - && \
@@ -122,7 +122,7 @@ RUN $CONDA_DIR/bin/conda install --yes \
 
 
 # Scala Spark kernel (build and cleanup)
-RUN cd /tmp && \
+RUN cd /opt && \
     echo deb http://dl.bintray.com/sbt/debian / > /etc/apt/sources.list.d/sbt.list && \
     apt-get update && \
     git clone https://github.com/ibm-et/spark-kernel.git && \
@@ -133,7 +133,7 @@ RUN cd /tmp && \
     chmod +x /opt/spark-kernel && \
     rm -rf ~/.ivy2 && \
     rm -rf ~/.sbt && \
-    rm -rf /tmp/spark-kernel && \
+    rm -rf /opt/spark-kernel && \
     apt-get remove -y sbt && \
     apt-get clean
     
