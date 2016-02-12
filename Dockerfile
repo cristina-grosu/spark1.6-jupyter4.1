@@ -104,6 +104,7 @@ RUN tar xzvf /opt/spark-1.6.0-bin-hadoop2.6.tgz
 RUN rm  /opt/spark-1.6.0-bin-hadoop2.6.tgz
 
 ENV CONDA_DIR /opt/conda
+ENV PATH $CONDA_DIR/bin:$PATH
 
 RUN cd /tmp && \
     mkdir -p $CONDA_DIR && \
@@ -114,10 +115,10 @@ RUN cd /tmp && \
     $CONDA_DIR/bin/conda install --yes conda==3.14.1
 
 # Install Jupyter notebook as jovyan
-RUN conda install --yes \
+RUN $CONDA_DIR/bin/conda install --yes \
     'notebook=4.1*' \
     terminado \
-    && conda clean -yt
+    && $CONDA_DIR/bin/conda clean -yt
 
 
 # Scala Spark kernel (build and cleanup)
@@ -156,7 +157,7 @@ RUN apt-get update && \
 #######ENV PATH $PATH:/root/anaconda3/bin
 #USER jovyan
 # Install Python 3 packages
-RUN /opt/conda/bin/conda install --yes \
+RUN $CONDA_DIR/bin/conda install --yes \
     'ipywidgets=4.0*' \
     'pandas=0.17*' \
     'matplotlib=1.4*' \
@@ -164,10 +165,10 @@ RUN /opt/conda/bin/conda install --yes \
     'seaborn=0.6*' \
     'scikit-learn=0.16*' 
     
-RUN /opt/conda/bin/conda clean -yt
+RUN $CONDA_DIR/bin/conda clean -yt
 
 # Install Python 2 packages
-RUN /opt/conda/bin/conda create -p $CONDA_DIR/envs/python2 python=2.7 \
+RUN $CONDA_DIR/bin/conda create -p $CONDA_DIR/envs/python2 python=2.7 \
     'ipython=4.0*' \
     'ipywidgets=4.0*' \
     'pandas=0.17*' \
@@ -176,15 +177,15 @@ RUN /opt/conda/bin/conda create -p $CONDA_DIR/envs/python2 python=2.7 \
     'seaborn=0.6*' \
     'scikit-learn=0.16*' \
     pyzmq \
-    && /opt/conda/bin/conda clean -yt
+    && $CONDA_DIR/bin/conda clean -yt
 
 # R packages
-RUN /opt/conda/bin/conda config --add channels r
-RUN /opt/conda/bin/conda install --yes \
+RUN $CONDA_DIR/bin/conda config --add channels r
+RUN $CONDA_DIR/bin/conda install --yes \
     'r-base=3.2*' \
     'r-irkernel=0.5*' \
     'r-ggplot2=1.0*' \
-    'r-rcurl=1.95*' && /opt/conda/bin/conda clean -yt
+    'r-rcurl=1.95*' && $CONDA_DIR/bin/conda clean -yt
 
 # Scala Spark kernel spec
 RUN mkdir -p /opt/conda/share/jupyter/kernels/scala
