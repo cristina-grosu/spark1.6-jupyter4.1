@@ -2,7 +2,8 @@
 
 
 #SPARK_HOME=`realpath /opt/spark/spark-*/`
-SPARK_HOME=`readlink -f /opt/spark*/`
+#SPARK_HOME=`readlink -f /opt/spark*/`
+SPARK_HOME=`/opt/spark-1.6.0-bin-hadoop2.6`
 
 echo Using SPARK_HOME=$SPARK_HOME
 
