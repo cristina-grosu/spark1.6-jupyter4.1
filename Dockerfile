@@ -139,6 +139,6 @@ ADD entrypoint.sh /opt/entrypoint.sh
 
 RUN chmod 777 /opt/entrypoint.sh
 
-RUN find / -name spark
+RUN mv spark-1.6.0-bin-hadoop2.6 /opt/
 
 ENTRYPOINT ["/opt/entrypoint.sh"]
