@@ -2,7 +2,7 @@
 
 
 #SPARK_HOME=`realpath /opt/spark/spark-*/`
-SPARK_HOME=`readlink -f /opt/spark-*/`
+SPARK_HOME=`readlink -f /opt/spark*/`
 
 echo Using SPARK_HOME=$SPARK_HOME
 
