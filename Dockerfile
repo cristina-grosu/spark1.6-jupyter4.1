@@ -139,4 +139,6 @@ ADD entrypoint.sh /opt/entrypoint.sh
 
 RUN chmod 777 /opt/entrypoint.sh
 
+RUN find / -name spark
+
 ENTRYPOINT ["/opt/entrypoint.sh"]
