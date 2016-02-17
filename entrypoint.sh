@@ -1,7 +1,9 @@
 #!/bin/bash
 
 
-SPARK_HOME=`realpath /opt/spark/spark-*/`
+#SPARK_HOME=`realpath /opt/spark/spark-*/`
+SPARK_HOME=`readlink -f /opt/spark/spark-*/`
+
 echo Using SPARK_HOME=$SPARK_HOME
 
 . "${SPARK_HOME}/sbin/spark-config.sh"
