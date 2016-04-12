@@ -143,4 +143,4 @@ RUN mv spark-1.6.0-bin-hadoop2.6 /opt/
 
 ADD spark-defaults.conf /opt/spark-1.6.0-bin-hadoop2.6/conf/spark-defaults.conf
 
-ENTRYPOINT ["/opt/entrypoint.sh"]
+ENTRYPOINT ["/opt/entrypoint.sh $PARAM"]
