@@ -10,6 +10,10 @@ RUN \
   apt-get install -y byobu curl git htop man unzip vim wget && \
   rm -rf /var/lib/apt/lists/*
 
+# Set UTF-8 locale
+RUN locale-gen en_US.UTF-8 && \
+    echo 'LANG="en_US.UTF-8"' > /etc/default/locale
+
 # Add files.
 ADD .bashrc /root/.bashrc
 
@@ -142,7 +146,5 @@ RUN chmod 777 /opt/entrypoint.sh
 RUN mv spark-1.6.0-bin-hadoop2.6 /opt/
 
 ADD spark-defaults.conf /opt/spark-1.6.0-bin-hadoop2.6/conf/spark-defaults.conf
-
-#ENV PARAM ""
 
 ENTRYPOINT ["/opt/entrypoint.sh"]
