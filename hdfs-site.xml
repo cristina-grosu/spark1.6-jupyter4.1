@@ -21,4 +21,18 @@ is replicated in all of the directories, for redundancy.
 amed directories, typically on different devices. Directories that do not exist are ignored.
  </description>
 </property>
-</configuration>
+<!-- Not sure if it works -->
+<!--<property>
+        <name>dfs.datanode.use.datanode.hostname</name>
+        <value>false</value>
+    </property>
+   
+    <property>
+        <name>dfs.namenode.datanode.registration.ip-hostname-check</name>
+        <value>false</value>
+    </property> 
+    -->
+    </configuration>
+    
+    
+    
