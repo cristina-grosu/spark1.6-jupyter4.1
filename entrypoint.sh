@@ -52,7 +52,7 @@ if [ "$MODE" == "headnode" ]; then
 	echo "SUNT IN HEADNODE"
 	/opt/hadoop/bin/hdfs namenode -format
 	echo "AM FACUT FORMAT"
-	${HADOOP_SBIN_DIR}/hadoop-daemons.sh --config "$HADOOP_CONF_DIR" --hostnames "$SPARK_MASTER_IP" --script "/opt/hadoop/bin/hdfs" start namenode
+	${HADOOP_SBIN_DIR}/hadoop-daemons.sh --config "$HADOOP_CONF_DIR" --hostnames "spark.marathon.mesos" --script "/opt/hadoop/bin/hdfs" start namenode
 	echo "INCERC SA FAC CEVA PE AICI"
 	${HADOOP_SBIN_DIR}/yarn-daemon.sh --config "$YARN_CONF_DIR" start resourcemanager 
 	echo "YUHUUUUUUUU"
@@ -67,7 +67,7 @@ elif [ "$MODE" == "datanode" ]; then
 	#${SPARK_HOME}/bin/spark-class "org.apache.spark.deploy.worker.Worker" --webui-port $SPARK_WORKER_WEBUI_PORT --port $SPARK_WORKER_PORT $SPARK_MASTER_URL
 else
 	/opt/hadoop/bin/hdfs namenode -format
-	${HADOOP_SBIN_DIR}/hadoop-daemons.sh --config "$HADOOP_CONF_DIR" --hostnames "0.0.0.0" --script "/opt/hadoop/bin/hdfs" start namenode
+	${HADOOP_SBIN_DIR}/hadoop-daemons.sh --config "$HADOOP_CONF_DIR" --hostnames "spark.marathon.mesos" --script "/opt/hadoop/bin/hdfs" start namenode
 	${HADOOP_SBIN_DIR}/yarn-daemon.sh --config "$YARN_CONF_DIR" start resourcemanager
 	
 	${HADOOP_SBIN_DIR}/hadoop-daemons.sh --config "$HADOOP_CONF_DIR" --script "/opt/hadoop/bin/hdfs" start datanode
