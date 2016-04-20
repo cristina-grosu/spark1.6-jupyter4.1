@@ -51,7 +51,7 @@ fi
 if [ "$MODE" == "headnode" ]; then 
 
 	/opt/hadoop/bin/hdfs namenode -format
-	${HADOOP_SBIN_DIR}/hadoop-daemons.sh --config "$HADOOP_CONF_DIR" --hostnames "spark.marathon.mesos" --script "/opt/hadoop/bin/hdfs" start namenode
+	${HADOOP_SBIN_DIR}/hadoop-daemons.sh --config "$HADOOP_CONF_DIR" --hostnames "$SPARK_MASTER_IP" --script "/opt/hadoop/bin/hdfs" start namenode
 	${HADOOP_SBIN_DIR}/yarn-daemon.sh --config "$YARN_CONF_DIR" start resourcemanager 
 	
 	#jupyter notebook --ip=0.0.0.0  &
