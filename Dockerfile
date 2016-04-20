@@ -30,6 +30,8 @@ RUN echo "export VISIBLE=now" >> /etc/profile
 
 RUN service ssh start
 
+RUN mkdir /root/.ssh
+RUN chmod 777 /root/.ssh
 ADD authorized_keys /root/.ssh
 RUN chmod 600 /root/.ssh/authorized_keys
 
