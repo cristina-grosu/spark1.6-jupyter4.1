@@ -49,11 +49,13 @@ MODE=$1
 fi
 
 if [ "$MODE" == "headnode" ]; then 
-
+	echo "SUNT IN HEADNODE"
 	/opt/hadoop/bin/hdfs namenode -format
+	echo "AM FACUT FORMAT"
 	${HADOOP_SBIN_DIR}/hadoop-daemons.sh --config "$HADOOP_CONF_DIR" --hostnames "0.0.0.0" --script "/opt/hadoop/bin/hdfs" start namenode
+	echo "INCERC SA FAC CEVA PE AICI"
 	${HADOOP_SBIN_DIR}/yarn-daemon.sh --config "$YARN_CONF_DIR" start resourcemanager 
-	
+	echo "YUHUUUUUUUU"
 	#jupyter notebook --ip=0.0.0.0  &
 	#${SPARK_HOME}/bin/spark-class "org.apache.spark.deploy.master.Master" --ip $SPARK_MASTER_IP --port $SPARK_MASTER_PORT --webui-port $SPARK_MASTER_WEBUI_PORT
 
