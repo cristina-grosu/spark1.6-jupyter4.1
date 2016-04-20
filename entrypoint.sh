@@ -4,12 +4,18 @@
 #SPARK_HOME=`realpath /opt/spark/spark-*/`
 #SPARK_HOME=`readlink -f /opt/spark*/`
 SPARK_HOME="/opt/spark-1.6.0-bin-hadoop2.6"
+HADOOP_HOME="opt/hadoop"
+HADOOP_SBIN_DIR="opt/hadoop/sbin"
+HADOOP_CONF_DIR="opt/hadoop/etc/hadoop"
+YARN_CONF_DIR="/opt/hadoop/etc/hadoop"
 
 echo Using SPARK_HOME=$SPARK_HOME
 
 . "${SPARK_HOME}/sbin/spark-config.sh"
 
 . "${SPARK_HOME}/bin/load-spark-env.sh"
+
+. "/root/.bashrc"
 
 if [ "$SPARK_MASTER_PORT" = "" ]; then
   SPARK_MASTER_PORT=7077
