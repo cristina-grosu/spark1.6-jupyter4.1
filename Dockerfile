@@ -17,7 +17,7 @@ RUN locale-gen en_US.UTF-8 && \
 # Enable passwordless ssh authentication
 #RUN apt-get remove -y openssh-client
 #RUN apt-get update
-#RUN apt-get install -y openssh-server
+RUN apt-get install -y openssh-server
 #RUN mkdir /var/run/sshd
 #RUN echo 'root:screencast' | chpasswd
 #RUN sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config
