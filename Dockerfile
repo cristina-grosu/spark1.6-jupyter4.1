@@ -52,6 +52,7 @@ ADD core-site.xml /opt/hadoop/etc/hadoop/
 ADD mapred-site.xml /opt/hadoop/etc/hadoop/
 ADD hdfs-site.xml /opt/hadoop/etc/hadoop
 ADD yarn-site.xml /opt/hadoop/etc/hadoop
+ADD slaves /opt/hadoop/etc/hadoop
 
 # Install Spark 1.6.0
 RUN cd /opt && wget http://apache.javapipe.com/spark/spark-1.6.0/spark-1.6.0-bin-hadoop2.6.tgz 
