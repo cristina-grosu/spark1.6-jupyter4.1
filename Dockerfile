@@ -15,25 +15,39 @@ RUN locale-gen en_US.UTF-8 && \
     echo 'LANG="en_US.UTF-8"' > /etc/default/locale
 
 # Enable passwordless ssh authentication
-RUN apt-get remove -y openssh-client
-RUN apt-get update
-RUN apt-get install -y openssh-server
-RUN mkdir /var/run/sshd
-RUN echo 'root:screencast' | chpasswd
-RUN sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+#RUN apt-get remove -y openssh-client
+#RUN apt-get update
+#RUN apt-get install -y openssh-server
+#RUN mkdir /var/run/sshd
+#RUN echo 'root:screencast' | chpasswd
+#RUN sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 
 # SSH login fix. Otherwise user is kicked off after login
-RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
+#RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
 
-ENV NOTVISIBLE "in users profile"
-RUN echo "export VISIBLE=now" >> /etc/profile
+#ENV NOTVISIBLE "in users profile"
+#RUN echo "export VISIBLE=now" >> /etc/profile
+RUN rm -f /etc/ssh/ssh_host_dsa_key /etc/ssh/ssh_host_rsa_key /root/.ssh/id_rsa
+RUN ssh-keygen -q -N "" -t dsa -f /etc/ssh/ssh_host_dsa_key
+RUN ssh-keygen -q -N "" -t rsa -f /etc/ssh/ssh_host_rsa_key
+RUN ssh-keygen -q -N "" -t rsa -f /root/.ssh/id_rsa
+RUN cp /root/.ssh/id_rsa.pub /root/.ssh/authorized_keys
+
 
 RUN service ssh start
 
-RUN mkdir /root/.ssh
-RUN chmod 777 /root/.ssh
-ADD authorized_keys /root/.ssh
-RUN chmod 600 /root/.ssh/authorized_keys
+#RUN mkdir /root/.ssh
+#RUN chmod 777 /root/.ssh
+#ADD authorized_keys /root/.ssh
+#RUN chmod 600 /root/.ssh/authorized_keys
+
+ADD ssh_config /root/.ssh/config
+RUN chmod 600 /root/.ssh/config
+RUN chown root:root /root/.ssh/config
+
+RUN sed  -i "/^[^#]*UsePAM/ s/.*/#&/"  /etc/ssh/sshd_config
+RUN echo "UsePAM no" >> /etc/ssh/sshd_config
+RUN echo "Port 2122" >> /etc/ssh/sshd_config
 
 # Add files.
 ADD .bashrc /root/.bashrc
@@ -55,10 +69,16 @@ RUN cd /opt && wget https://www.apache.org/dist/hadoop/core/hadoop-2.7.1/hadoop-
 
 ENV HADOOP_HOME /opt/hadoop
 
-ADD core-site.xml /opt/hadoop/etc/hadoop/
-ADD mapred-site.xml /opt/hadoop/etc/hadoop/
+ADD core-site.xml /opt/hadoop/etc/hadoop/core-site.xml.template
+RUN sed s/HOSTNAME/$HOSTNAME/ /opt/hadoop/etc/hadoop/core-site.xml.template > /opt/hadoop/etc/hadoop/core-site.xml
+
+ADD mapred-site.xml /opt/hadoop/etc/hadoop/mapred-site.xml.template
+RUN sed s/HOSTNAME/$HOSTNAME/ /opt/hadoop/etc/hadoop/mapred-site.xml.template > /opt/hadoop/etc/hadoop/mapred-site.xml
+
 ADD hdfs-site.xml /opt/hadoop/etc/hadoop
-ADD yarn-site.xml /opt/hadoop/etc/hadoop
+ADD yarn-site.xml /opt/hadoop/etc/hadoop/yarn-site.xml.template
+RUN sed s/HOSTNAME/$HOSTNAME/ /opt/hadoop/etc/hadoop/yarn-site.xml.template > /opt/hadoop/etc/hadoop/yarn-site.xml
+
 ADD slaves /opt/hadoop/etc/hadoop
 
 # Install Spark 1.6.0
@@ -172,6 +192,9 @@ RUN chmod 777 /opt/entrypoint.sh
 
 RUN mv spark-1.6.0-bin-hadoop2.6 /opt/
 
-ADD spark-defaults.conf /opt/spark-1.6.0-bin-hadoop2.6/conf/spark-defaults.conf
+ADD spark-defaults.conf /opt/spark-1.6.0-bin-hadoop2.6/conf/spark-defaults.conf.template
+RUN sed s/HOSTNAME/$HOSTNAME/ /opt/spark-1.6.0-bin-hadoop2.6/conf/spark-defaults.conf.template > /opt/spark-1.6.0-bin-hadoop2.6/conf/spark-defaults.conf
+
+ADD spark-env.sh /opt/spark-1.6.0-bin-hadoop2.6/conf/spark-env.sh
 
 ENTRYPOINT ["/opt/entrypoint.sh"]
