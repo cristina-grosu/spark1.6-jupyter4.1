@@ -1,7 +1,7 @@
 <configuration>
 <property>
  <name>mapreduce.jobtracker.address</name>
- <value>spark.marathon.mesos:54311</value>
+ <value>HOSTNAME:54311</value>
 </property>
 <property>
  <name>mapreduce.framework.name</name>
