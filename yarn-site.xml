@@ -5,22 +5,22 @@
 </property>
 <property>
  <name>yarn.resourcemanager.scheduler.address</name>
- <value>spark.marathon.mesos:8030</value>
+ <value>HOSTNAME:8030</value>
 </property>
 <property>
  <name>yarn.resourcemanager.address</name>
- <value>spark.marathon.mesos:8032</value>
+ <value>HOSTNAME:8032</value>
 </property>
 <property>
   <name>yarn.resourcemanager.webapp.address</name>
-  <value>spark.marathon.mesos:8088</value>
+  <value>HOSTNAME:8088</value>
 </property>
 <property>
   <name>yarn.resourcemanager.resource-tracker.address</name>
-  <value>spark.marathon.mesos:8031</value>
+  <value>HOSTNAME:8031</value>
 </property>
 <property>
   <name>yarn.resourcemanager.admin.address</name>
-  <value>spark.marathon.mesos:8033</value>
+  <value>HOSTNAME:8033</value>
 </property>
 </configuration>
